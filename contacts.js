@@ -25,7 +25,6 @@ function getContactById(contactId) {
         return contactData;
       } else {
         console.log("contact wasn't found in data");
-        return "contact wasn't found in data";
       }
     })
     .catch((err) => console.log(err.message));
@@ -49,21 +48,18 @@ function removeContact(contactId) {
             console.log(err.message);
           } else {
             console.log("File saved with updated contacts list");
-            return "File saved with updated contacts list";
           }
         });
       } else {
         console.log(
           "Sorry. Contact you are trying to delete, doesn't exist in database"
         );
-        return "Sorry. Contact you are trying to delete, doesn't exist in database";
       }
     })
     .catch((err) => console.log(err.message));
 }
 
 // removeContact();
-removeContact("test");
 
 function addContact(name, email, phone) {
   const newContact = {

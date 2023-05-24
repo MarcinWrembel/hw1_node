@@ -1,17 +1,13 @@
 const contacts = require("./contacts");
-// const { program } = require("commander");
 const { Command } = require("commander");
 
 const program = new Command();
 program
-  .option("-a, --action <type>", "choose action")
-  .option("-i, --id <type>", "user id")
-  .option("-n, --name <type>", "user name")
-  .option("-e, --email <type>", "user email")
-  .option("-p, --phone <type>", "user phone");
-
-
-
+  .option("-a, --action <string>", "choose action")
+  .option("-i, --id <string>", "user id")
+  .option("-n, --name <string>", "user name")
+  .option("-e, --email <string>", "user email")
+  .option("-p, --phone <string>", "user phone");
 
 program.parse(process.argv);
 
@@ -41,3 +37,5 @@ function invokeAction({ action, id, name, email, phone }) {
 }
 
 invokeAction(argv);
+// invokeAction({action: "list"});
+// invokeAction({action: "get",id: "vza2RIzNGIwutCVCs4mCL"});

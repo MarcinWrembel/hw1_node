@@ -1,8 +1,16 @@
 const fs = require("fs").promises;
 const path = require("path");
-const contactsData = require("./db/contacts.json");
+const crypto = require('crypto');
+// const { performance } = require("perf_hooks");
 
 const contactsPath = path.join("./db", "contacts.json");
+
+const contactsData = require("./db/contacts.json");
+
+// const startTime = performance.now();
+// const endTime = performance.now();
+// const executionTime = endTime - startTime;
+// console.log(`Czas wykonania1: ${executionTime} ms`);
 
 function listContacts() {
   fs.readFile(contactsPath)
@@ -13,8 +21,6 @@ function listContacts() {
     .catch((err) => console.log(err.message));
 }
 
-// listContacts();
-
 function getContactById(contactId) {
   fs.readFile(contactsPath)
     .then((data) => {
@@ -23,15 +29,11 @@ function getContactById(contactId) {
       if (contactData.length > 0) {
         console.log(contactData);
         return contactData;
-      } else {
-        console.log("contact wasn't found in data");
       }
+      console.log("contact wasn't found in data");
     })
     .catch((err) => console.log(err.message));
 }
-
-// getContactById();
-// getContactById("drsAJ4SHPYqZeG-83QTVW");
 
 function removeContact(contactId) {
   fs.readFile(contactsPath)
@@ -46,10 +48,10 @@ function removeContact(contactId) {
         fs.writeFile(contactsPath, JSON.stringify(contacts), (err) => {
           if (err) {
             console.log(err.message);
-          } else {
-            console.log("File saved with updated contacts list");
+            return;
           }
         });
+        console.log("Contact removed. File saved with updated contacts list");
       } else {
         console.log(
           "Sorry. Contact you are trying to delete, doesn't exist in database"
@@ -59,33 +61,31 @@ function removeContact(contactId) {
     .catch((err) => console.log(err.message));
 }
 
-// removeContact();
-
 function addContact(name, email, phone) {
   const newContact = {
+    id: crypto.randomUUID(),
     name,
     email,
     phone,
   };
 
-  // console.log(contactsData);
+  if (name === undefined || email === undefined || phone === undefined) {
+    console.log("Please set all arguments (name,email,phone) to add contact");
+    return;
+  }
 
-  let contactsList = contactsData.push(newContact);
-
-  console.log(contactsData);
+  contactsData.push(newContact);
 
   const contactsDataUpd = JSON.stringify(contactsData);
 
   fs.writeFile(contactsPath, contactsDataUpd, (err) => {
     if (err) {
-      console.log(err.message);
-    } else {
-      console.log("Contact added to database");
+      console.log("Data can't be written in file:", err.message);
+      return;
     }
   });
+  console.log("Contact added to database");
 }
-
-// addContact("Zenek C", "zenek@com.pl", "698 999 999");
 
 module.exports = {
   listContacts,
